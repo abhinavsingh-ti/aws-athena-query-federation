@@ -10,8 +10,8 @@ Metadata:
     Labels:
       - athena-federation
     HomePageUrl: 'https://github.com/awslabs/aws-athena-query-federation'
-    SemanticVersion: 2022.2.1
-    SourceCodeUrl: 'https://github.com/awslabs/aws-athena-query-federation'
+    SemanticVersion: 1.0
+    SourceCodeUrl: 'https://github.com/abhinavsingh-ti/aws-athena-query-federation'
 Parameters:
   AthenaCatalogName:
     Description: 'The name you will give to this catalog in Athena. It will also be used as the function name. This name must satisfy the pattern ^[a-z0-9-_]{1,64}$'
