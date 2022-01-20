@@ -171,11 +171,8 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>validate</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
+                        <id>checkstyle-validation</id>
+                        <phase>none</phase>
                     </execution>
                 </executions>
             </plugin>
