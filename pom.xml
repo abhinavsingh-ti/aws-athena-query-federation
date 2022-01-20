@@ -219,6 +219,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
+                        <testFailureIgnore>true</testFailureIgnore>
                     <excludes>
                         <exclude>*IntegTest</exclude>
                     </excludes>

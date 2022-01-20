@@ -183,11 +183,29 @@ public class MetricsRecordHandler
                                 ? null : (dimensionNameConstraint.getSingleValue().toString());
                         matches &= block.offerValue(DIMENSION_NAME_FIELD, row, dimName);
 
+                        Boolean chk = false;
+                        for(Dimension dim: nextMetric.getDimensions())
+                        {
+                            if(dim.getName().equals("account"))
+                            {
+                                String dimValWrite = dim.getValue();
+                                block.offerValue(DIMENSION_VALUE_FIELD, row, dimValWrite);
+                                chk=true;
+                                break;
+                            }
+                        }
+
                         //This field is 'faked' in that we just use it as a convenient way to filter single dimensions. As such
                         //we always populate it with the value of the filter if the constraint passed and the filter was singleValue
-                        String dimValue = (dimensionValueConstraint == null || !dimensionValueConstraint.isSingleValue())
+                        
+                        if(!chk)
+                        {
+                            String dimVal = (dimensionValueConstraint == null || !dimensionValueConstraint.isSingleValue())
                                 ? null : dimensionValueConstraint.getSingleValue().toString();
-                        matches &= block.offerValue(DIMENSION_VALUE_FIELD, row, dimValue);
+                            matches &= block.offerValue(DIMENSION_VALUE_FIELD, row, dimVal);
+
+                        }
+                        
                     }
                     return matches ? 1 : 0;
                 });
@@ -249,12 +267,29 @@ public class MetricsRecordHandler
                         String dimName = (dimensionNameConstraint == null || !dimensionNameConstraint.isSingleValue())
                                 ? null : dimensionNameConstraint.getSingleValue().toString();
                         block.offerValue(DIMENSION_NAME_FIELD, row, dimName);
+                        Boolean chk = false;
+                        for(Dimension dim: metricStat.getMetric().getDimensions())
+                        {
+                            if(dim.getName().equals("account"))
+                            {
+                                String dimValWrite = dim.getValue();
+                                block.offerValue(DIMENSION_VALUE_FIELD, row, dimValWrite);
+                                chk=true;
+                                break;
+                            }
+                        }
 
                         //This field is 'faked' in that we just use it as a convenient way to filter single dimensions. As such
                         //we always populate it with the value of the filter if the constraint passed and the filter was singleValue
-                        String dimVal = (dimensionValueConstraint == null || !dimensionValueConstraint.isSingleValue())
+                        
+                        if(!chk)
+                        {
+                            String dimVal = (dimensionValueConstraint == null || !dimensionValueConstraint.isSingleValue())
                                 ? null : dimensionValueConstraint.getSingleValue().toString();
-                        block.offerValue(DIMENSION_VALUE_FIELD, row, dimVal);
+                            block.offerValue(DIMENSION_VALUE_FIELD, row, dimVal);
+
+                        }
+                        
 
                         block.offerValue(PERIOD_FIELD, row, metricStat.getPeriod());
 
