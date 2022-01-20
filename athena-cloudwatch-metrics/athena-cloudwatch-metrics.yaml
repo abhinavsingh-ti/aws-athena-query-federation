@@ -23,7 +23,7 @@ Parameters:
   SpillPrefix:
     Description: 'The prefix within SpillBucket where this function can spill data.'
     Type: String
-    Default: athena-spill
+    Default: athena-spill-2
   LambdaTimeout:
     Description: 'Maximum Lambda invocation runtime in seconds. (min 1 - 900 max)'
     Default: 900
