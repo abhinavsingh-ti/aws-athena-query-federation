@@ -1,7 +1,7 @@
 Transform: 'AWS::Serverless-2016-10-31'
 Metadata:
   'AWS::ServerlessRepo::Application':
-    Name: AthenaCloudwatchMetricsConnector
+    Name: AthenaCloudwatchMetricsConnectorCustom
     Description: 'This connector enables Amazon Athena to communicate with Cloudwatch Metrics, making your metrics data accessible via SQL.'
     Author: 'default author'
     SpdxLicenseId: Apache-2.0
@@ -10,7 +10,7 @@ Metadata:
     Labels:
       - athena-federation
     HomePageUrl: 'https://github.com/awslabs/aws-athena-query-federation'
-    SemanticVersion: 1.0.0
+    SemanticVersion: 2022.2.2
     SourceCodeUrl: 'https://github.com/abhinavsingh-ti/aws-athena-query-federation'
 Parameters:
   AthenaCatalogName:
@@ -20,6 +20,7 @@ Parameters:
   SpillBucket:
     Description: 'The name of the bucket where this function can spill data.'
     Type: String
+    Default: 'gfi-app-manager-spill'
   SpillPrefix:
     Description: 'The prefix within SpillBucket where this function can spill data.'
     Type: String

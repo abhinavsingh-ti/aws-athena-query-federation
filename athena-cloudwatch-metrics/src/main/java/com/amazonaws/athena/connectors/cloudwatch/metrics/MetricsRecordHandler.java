@@ -184,10 +184,12 @@ public class MetricsRecordHandler
                         matches &= block.offerValue(DIMENSION_NAME_FIELD, row, dimName);
 
                         Boolean chk = false;
+                        logger.info("List Metrics");
                         for(Dimension dim: nextMetric.getDimensions())
                         {
                             if(dim.getName().equals("account"))
                             {
+                                logger.info("Writing in the account");
                                 String dimValWrite = dim.getValue();
                                 block.offerValue(DIMENSION_VALUE_FIELD, row, dimValWrite);
                                 chk=true;
@@ -200,6 +202,7 @@ public class MetricsRecordHandler
                         
                         if(!chk)
                         {
+                            logger.info("This executed boolean");
                             String dimVal = (dimensionValueConstraint == null || !dimensionValueConstraint.isSingleValue())
                                 ? null : dimensionValueConstraint.getSingleValue().toString();
                             matches &= block.offerValue(DIMENSION_VALUE_FIELD, row, dimVal);
@@ -261,6 +264,8 @@ public class MetricsRecordHandler
                                     throw new RuntimeException("Unexpected field " + field.getName());
                                 },
                                 metricStat.getMetric().getDimensions());
+                        
+                        logger.info("Get Metrics");
 
                         //This field is 'faked' in that we just use it as a convenient way to filter single dimensions. As such
                         //we always populate it with the value of the filter if the constraint passed and the filter was singleValue
@@ -271,7 +276,7 @@ public class MetricsRecordHandler
                         for(Dimension dim: metricStat.getMetric().getDimensions())
                         {
                             if(dim.getName().equals("account"))
-                            {
+                            { logger.info("Writing in the account");
                                 String dimValWrite = dim.getValue();
                                 block.offerValue(DIMENSION_VALUE_FIELD, row, dimValWrite);
                                 chk=true;
@@ -284,6 +289,7 @@ public class MetricsRecordHandler
                         
                         if(!chk)
                         {
+                            logger.info("this executed here in get metrics");
                             String dimVal = (dimensionValueConstraint == null || !dimensionValueConstraint.isSingleValue())
                                 ? null : dimensionValueConstraint.getSingleValue().toString();
                             block.offerValue(DIMENSION_VALUE_FIELD, row, dimVal);
