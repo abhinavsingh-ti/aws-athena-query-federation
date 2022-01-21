@@ -46,6 +46,30 @@ public abstract class Table
     public static final String STATISTIC_FIELD = "statistic";
     //The name of the period field (e.g. 60 seconds).
     public static final String PERIOD_FIELD = "period";
+    // Name of the metrics Dimension
+    public static final String DIM_NAME_1 = "dim_name_1";
+    public static final String DIM_NAME_2 = "dim_name_2";
+    public static final String DIM_NAME_3 = "dim_name_3";
+    public static final String DIM_NAME_4 = "dim_name_4";
+    public static final String DIM_NAME_5 = "dim_name_5";
+    public static final String DIM_NAME_6 = "dim_name_6";
+    public static final String DIM_NAME_7 = "dim_name_7";
+    public static final String DIM_NAME_8 = "dim_name_8";
+    public static final String DIM_NAME_9 = "dim_name_9";
+    public static final String DIM_NAME_10 = "dim_name_10";
+    // Value of metric Dimension
+    public static final String DIM_VALUE_1 = "dim_value_1";
+    public static final String DIM_VALUE_2 = "dim_value_2";
+    public static final String DIM_VALUE_3 = "dim_value_3";
+    public static final String DIM_VALUE_4 = "dim_value_4";
+    public static final String DIM_VALUE_5 = "dim_value_5";
+    public static final String DIM_VALUE_6 = "dim_value_6";
+    public static final String DIM_VALUE_7 = "dim_value_7";
+    public static final String DIM_VALUE_8 = "dim_value_8";
+    public static final String DIM_VALUE_9 = "dim_value_9";
+    public static final String DIM_VALUE_10 = "dim_value_10";
+
+
 
     public abstract String getName();
     public abstract Schema getSchema();
