@@ -71,6 +71,26 @@ import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.PE
 import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.STATISTIC_FIELD;
 import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.TIMESTAMP_FIELD;
 import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.VALUE_FIELD;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_NAME_1;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_NAME_2;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_NAME_3;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_NAME_4;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_NAME_5;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_NAME_6;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_NAME_7;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_NAME_8;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_NAME_9;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_NAME_10;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_VALUE_1;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_VALUE_2;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_VALUE_3;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_VALUE_4;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_VALUE_5;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_VALUE_6;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_VALUE_7;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_VALUE_8;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_VALUE_9;
+import static com.amazonaws.athena.connectors.cloudwatch.metrics.tables.Table.DIM_VALUE_10;
 
 /**
  * Handles data read record requests for the Athena Cloudwatch Metrics Connector.
@@ -148,6 +168,29 @@ public class MetricsRecordHandler
         ListMetricsRequest listMetricsRequest = new ListMetricsRequest();
         MetricUtils.pushDownPredicate(request.getConstraints(), listMetricsRequest);
         String prevToken;
+        HashSet<String> dimNames = new HashSet<>();
+        dimNames.add(DIM_NAME_1);
+        dimNames.add(DIM_NAME_2);
+        dimNames.add(DIM_NAME_3);
+        dimNames.add(DIM_NAME_4);
+        dimNames.add(DIM_NAME_5);
+        dimNames.add(DIM_NAME_6);
+        dimNames.add(DIM_NAME_7);
+        dimNames.add(DIM_NAME_8);
+        dimNames.add(DIM_NAME_9);
+        dimNames.add(DIM_NAME_10);
+        HashSet<String> dimValues = new HashSet<>();
+        dimValues.add(DIM_VALUE_1);
+        dimValues.add(DIM_VALUE_2);
+        dimValues.add(DIM_VALUE_3);
+        dimValues.add(DIM_VALUE_4);
+        dimValues.add(DIM_VALUE_5);
+        dimValues.add(DIM_VALUE_6);
+        dimValues.add(DIM_VALUE_7);
+        dimValues.add(DIM_VALUE_8);
+        dimValues.add(DIM_VALUE_9);
+        dimValues.add(DIM_VALUE_10);
+
         Set<String> requiredFields = new HashSet<>();
         request.getSchema().getFields().stream().forEach(next -> requiredFields.add(next.getName()));
         ValueSet dimensionNameConstraint = request.getConstraints().getSummary().get(DIMENSION_NAME_FIELD);
@@ -167,9 +210,23 @@ public class MetricsRecordHandler
                                 row,
                                 (Field field, Object val) -> {
                                     if (field.getName().equals(DIMENSION_NAME_FIELD)) {
+                                        String name = ((Dimension) val).getName();
+                                        String [] split_name = name.split("_");
+                                        String num = split_name[split_name.length-1];
+                                        if(dimNames.contains("dim_name_"+num))
+                                        {
+                                            block.offerValue("dim_name_"+num, row,name);
+                                        }
                                         return ((Dimension) val).getName();
                                     }
                                     else if (field.getName().equals(DIMENSION_VALUE_FIELD)) {
+                                        String value = ((Dimension) val).getValue();
+                                        String [] split_value = value.split("_");
+                                        String num = split_value[split_value.length-1];
+                                        if(dimValues.contains("dim_value_"+num))
+                                        {
+                                            block.offerValue("dim_value_"+num, row,value);
+                                        }
                                         return ((Dimension) val).getValue();
                                     }
 
@@ -224,6 +281,28 @@ public class MetricsRecordHandler
     private void readMetricSamplesWithConstraint(BlockSpiller blockSpiller, ReadRecordsRequest request, QueryStatusChecker queryStatusChecker)
             throws TimeoutException
     {
+        HashSet<String> dimNames = new HashSet<>();
+        dimNames.add(DIM_NAME_1);
+        dimNames.add(DIM_NAME_2);
+        dimNames.add(DIM_NAME_3);
+        dimNames.add(DIM_NAME_4);
+        dimNames.add(DIM_NAME_5);
+        dimNames.add(DIM_NAME_6);
+        dimNames.add(DIM_NAME_7);
+        dimNames.add(DIM_NAME_8);
+        dimNames.add(DIM_NAME_9);
+        dimNames.add(DIM_NAME_10);
+        HashSet<String> dimValues = new HashSet<>();
+        dimValues.add(DIM_VALUE_1);
+        dimValues.add(DIM_VALUE_2);
+        dimValues.add(DIM_VALUE_3);
+        dimValues.add(DIM_VALUE_4);
+        dimValues.add(DIM_VALUE_5);
+        dimValues.add(DIM_VALUE_6);
+        dimValues.add(DIM_VALUE_7);
+        dimValues.add(DIM_VALUE_8);
+        dimValues.add(DIM_VALUE_9);
+        dimValues.add(DIM_VALUE_10);
         GetMetricDataRequest dataRequest = MetricUtils.makeGetMetricDataRequest(request);
         Map<String, MetricDataQuery> queries = new HashMap<>();
         for (MetricDataQuery query : dataRequest.getMetricDataQueries()) {
@@ -255,9 +334,25 @@ public class MetricsRecordHandler
                                 row,
                                 (Field field, Object val) -> {
                                     if (field.getName().equals(DIMENSION_NAME_FIELD)) {
+                                        String name = ((Dimension) val).getName();
+                                        String [] split_name = name.split("_");
+                                        String num = split_name[split_name.length-1];
+                                        if(dimNames.contains("dim_name_"+num))
+                                        {
+                                            block.offerValue("dim_name_"+num, row,name);
+                                        }
+
+
                                         return ((Dimension) val).getName();
                                     }
                                     else if (field.getName().equals(DIMENSION_VALUE_FIELD)) {
+                                        String value = ((Dimension) val).getValue();
+                                        String [] split_value = value.split("_");
+                                        String num = split_value[split_value.length-1];
+                                        if(dimValues.contains("dim_value_"+num))
+                                        {
+                                            block.offerValue("dim_value_"+num, row,value);
+                                        }
                                         return ((Dimension) val).getValue();
                                     }
 
