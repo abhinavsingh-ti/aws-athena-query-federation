@@ -219,7 +219,7 @@ public class MetricsRecordHandler
                                         }
                                         return ((Dimension) val).getName();
                                     }
-                                    else if (field.getName().equals(DIMENSION_VALUE_FIELD)) {
+                                    if (field.getName().equals(DIMENSION_VALUE_FIELD)) {
                                         String name = ((Dimension) val).getName();
                                         String [] split_name = name.split("_");
                                         String num = split_name[split_name.length-1];
@@ -346,7 +346,7 @@ public class MetricsRecordHandler
 
                                         return ((Dimension) val).getName();
                                     }
-                                    else if (field.getName().equals(DIMENSION_VALUE_FIELD)) {
+                                    if (field.getName().equals(DIMENSION_VALUE_FIELD)) {
                                         String name = ((Dimension) val).getName();
                                         String [] split_name = name.split("_");
                                         String num = split_name[split_name.length-1];
