@@ -205,35 +205,20 @@ public class MetricsRecordHandler
                         matches &= block.offerValue(METRIC_NAME_FIELD, row, nextMetric.getMetricName());
                         matches &= block.offerValue(NAMESPACE_FIELD, row, nextMetric.getNamespace());
                         matches &= block.offerComplexValue(STATISTIC_FIELD, row, DEFAULT, STATISTICS);
-
+                        
                         matches &= block.offerComplexValue(DIMENSIONS_FIELD,
-                                row,
-                                (Field field, Object val) -> {
-                                    if (field.getName().equals(DIMENSION_NAME_FIELD)) {
-                                        String name = ((Dimension) val).getName();
-                                        String [] split_name = name.split("_");
-                                        String num = split_name[split_name.length-1];
-                                        if(dimNames.contains("dim_name_"+num))
-                                        {
-                                            block.offerValue("dim_name_"+num, row,name);
-                                        }
-                                        return ((Dimension) val).getName();
-                                    }
-                                    if (field.getName().equals(DIMENSION_VALUE_FIELD)) {
-                                        String name = ((Dimension) val).getName();
-                                        String [] split_name = name.split("_");
-                                        String num = split_name[split_name.length-1];
-                                        String value = ((Dimension) val).getValue();
-                                        if(dimValues.contains("dim_value_"+num))
-                                        {
-                                            block.offerValue("dim_value_"+num, row,value);
-                                        }
-                                        return ((Dimension) val).getValue();
-                                    }
+                        row,
+                        (Field field, Object val) -> {
+                            if (field.getName().equals(DIMENSION_NAME_FIELD)) {
+                                return ((Dimension) val).getName();
+                            }
+                            if (field.getName().equals(DIMENSION_VALUE_FIELD)) {
+                                return ((Dimension) val).getValue();
+                            }
 
-                                    throw new RuntimeException("Unexpected field " + field.getName());
-                                },
-                                nextMetric.getDimensions());
+                            throw new RuntimeException("Unexpected field " + field.getName());
+                        },
+                        nextMetric.getDimensions());
 
                         //This field is 'faked' in that we just use it as a convenient way to filter single dimensions. As such
                         //we always populate it with the value of the filter if the constraint passed and the filter was singleValue
@@ -252,6 +237,19 @@ public class MetricsRecordHandler
                                 block.offerValue(DIMENSION_VALUE_FIELD, row, dimValWrite);
                                 chk=true;
                                 break;
+                            }
+                        }
+
+                        for(Dimension dim: nextMetric.getDimensions())
+                        {
+                            String name = dim.getName();
+                            String value = dim.getValue();
+                            String [] split_name = name.split("_");
+                            String num = split_name[split_name.length-1];
+                            if(dimNames.contains("dim_name_"+num))
+                            {
+                                block.offerValue("dim_name_"+num, row,name);
+                                block.offerValue("dim_value_"+num, row,value);
                             }
                         }
 
@@ -307,7 +305,6 @@ public class MetricsRecordHandler
         GetMetricDataRequest dataRequest = MetricUtils.makeGetMetricDataRequest(request);
         Map<String, MetricDataQuery> queries = new HashMap<>();
         for (MetricDataQuery query : dataRequest.getMetricDataQueries()) {
-            system.out.println(query);
             queries.put(query.getId(), query);
         }
 
@@ -331,31 +328,14 @@ public class MetricsRecordHandler
                         block.offerValue(METRIC_NAME_FIELD, row, metricStat.getMetric().getMetricName());
                         block.offerValue(NAMESPACE_FIELD, row, metricStat.getMetric().getNamespace());
                         block.offerValue(STATISTIC_FIELD, row, metricStat.getStat());
-
+                        
                         block.offerComplexValue(DIMENSIONS_FIELD,
                                 row,
                                 (Field field, Object val) -> {
                                     if (field.getName().equals(DIMENSION_NAME_FIELD)) {
-                                        String name = ((Dimension) val).getName();
-                                        String [] split_name = name.split("_");
-                                        String num = split_name[split_name.length-1];
-                                        if(dimNames.contains("dim_name_"+num))
-                                        {
-                                            block.offerValue("dim_name_"+num, row,name);
-                                        }
-
-
                                         return ((Dimension) val).getName();
                                     }
                                     if (field.getName().equals(DIMENSION_VALUE_FIELD)) {
-                                        String name = ((Dimension) val).getName();
-                                        String [] split_name = name.split("_");
-                                        String num = split_name[split_name.length-1];
-                                        String value = ((Dimension) val).getValue();
-                                        if(dimValues.contains("dim_value_"+num))
-                                        {
-                                            block.offerValue("dim_value_"+num, row,value);
-                                        }
                                         return ((Dimension) val).getValue();
                                     }
 
@@ -392,6 +372,19 @@ public class MetricsRecordHandler
                                 ? null : dimensionValueConstraint.getSingleValue().toString();
                             block.offerValue(DIMENSION_VALUE_FIELD, row, dimVal);
 
+                        }
+
+                        for(Dimension dim: metricStat.getMetric().getDimensions())
+                        {
+                            String name = dim.getName();
+                            String value = dim.getValue();
+                            String [] split_name = name.split("_");
+                            String num = split_name[split_name.length-1];
+                            if(dimNames.contains("dim_name_"+num))
+                            {
+                                block.offerValue("dim_name_"+num, row,name);
+                                block.offerValue("dim_value_"+num, row,value);
+                            }
                         }
                         
 
