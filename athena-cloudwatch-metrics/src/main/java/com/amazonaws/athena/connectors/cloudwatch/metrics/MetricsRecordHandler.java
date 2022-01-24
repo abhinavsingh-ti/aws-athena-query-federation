@@ -307,6 +307,7 @@ public class MetricsRecordHandler
         GetMetricDataRequest dataRequest = MetricUtils.makeGetMetricDataRequest(request);
         Map<String, MetricDataQuery> queries = new HashMap<>();
         for (MetricDataQuery query : dataRequest.getMetricDataQueries()) {
+            system.out.println(query);
             queries.put(query.getId(), query);
         }
 
